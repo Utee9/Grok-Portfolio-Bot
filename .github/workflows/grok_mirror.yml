@@ -1,0 +1,61 @@
+name: Grok Portfolio Mirror
+
+on:
+  schedule:
+    # Every 6 hours. GitHub may run this a few minutes late under load — fine for this use case.
+    - cron: '0 */6 * * *'
+  workflow_dispatch: {}   # lets you trigger a run manually from the Actions tab, for testing
+
+# Prevents overlapping runs if one execution takes longer than expected
+concurrency:
+  group: grok-mirror
+  cancel-in-progress: false
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up Node (needed for bgc CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Bitget Agent CLI (bgc)
+        run: npm install -g @bitget-ai/bitget-agent-cli
+
+      - name: Run the pipeline
+        env:
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          BITGET_API_KEY: ${{ secrets.BITGET_API_KEY }}
+          BITGET_SECRET_KEY: ${{ secrets.BITGET_SECRET_KEY }}
+          BITGET_PASSPHRASE: ${{ secrets.BITGET_PASSPHRASE }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # Set to "true" while testing so no real orders are ever placed.
+          # Flip to "false" only once you've verified everything on paper-trading.
+          DRY_RUN: 'true'
+        run: python scripts/main.py
+
+      - name: Commit updated snapshot + latest state
+        run: |
+          git config user.name "grok-mirror-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet && echo "No data changes to commit" || \
+            git commit -m "chore: update portfolio snapshot [skip ci]"
+          git push
