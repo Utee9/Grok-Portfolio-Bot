@@ -1,14 +1,14 @@
 """
-Fetches @grkportfolio's most recent posts via xAI's live X-search, and asks
-Grok to extract any stock positions mentioned as structured JSON.
+Fetches @grkportfolio's most recent posts via xAI's X Search tool (part of
+the current Responses API), and asks Grok to extract any stock positions
+mentioned as structured JSON.
 
-IMPORTANT: xAI's exact request schema for enabling live X-search (as opposed
-to a plain chat completion) has changed more than once as the API has
-evolved. Treat the request body below as a best-effort starting point, not
-a guaranteed-correct call -- verify the current field names against
-https://docs.x.ai before your first real run, and adjust as needed.
-As of writing, xAI bills live-search usage as a per-call "tool" fee on top
-of normal token costs (see docs.x.ai/docs/models for current rates).
+NOTE: xAI deprecated the old `search_parameters`-on-`/v1/chat/completions`
+approach (it now returns HTTP 410 Gone). Live search is now done via the
+Responses API (`/v1/responses`) with a `tools: [{"type": "x_search"}]`
+entry. Confirmed against https://docs.x.ai/developers/tools/x-search as of
+this writing -- if this starts failing again, that's the page to re-check
+first, since xAI's tool APIs are still evolving.
 """
 
 import os
@@ -16,12 +16,13 @@ import json
 import requests
 
 XAI_API_KEY = os.environ["XAI_API_KEY"]
-XAI_ENDPOINT = "https://api.x.ai/v1/chat/completions"
+XAI_ENDPOINT = "https://api.x.ai/v1/responses"
+GROK_PORTFOLIO_HANDLE = "grkportfolio"
 
 EXTRACTION_PROMPT = """
-Search X for the most recent posts from the account @grkportfolio (also
-known as "The Grok Portfolio"). Look specifically for posts that disclose
-stock or ETF positions, weights, or performance updates.
+Look at the most recent posts from the account @grkportfolio (also known
+as "The Grok Portfolio"). Look specifically for posts that disclose stock
+or ETF positions, weights, or performance updates.
 
 Return ONLY a JSON object (no markdown, no commentary) in exactly this shape:
 
@@ -41,10 +42,35 @@ from memory. If no relevant posts are found, return an empty "positions" list.
 """
 
 
+def _extract_text_from_responses_payload(payload: dict) -> str:
+    """
+    The Responses API returns an `output` list that can contain reasoning
+    items, tool-call items, and message items mixed together. We only want
+    the text content of the final assistant message(s). This walks the
+    output list and concatenates any output_text content it finds.
+    """
+    text_parts = []
+    for item in payload.get("output", []):
+        if item.get("type") != "message":
+            continue
+        for content_piece in item.get("content", []):
+            if content_piece.get("type") == "output_text":
+                text_parts.append(content_piece.get("text", ""))
+
+    if not text_parts:
+        raise ValueError(
+            f"Could not find any output_text in the Responses API payload. "
+            f"Full payload was:\n{json.dumps(payload, indent=2)}"
+        )
+
+    return "".join(text_parts)
+
+
 def fetch_latest_positions() -> dict:
     """
-    Calls the xAI API with live X-search enabled and asks Grok to return
-    structured position data extracted from @grkportfolio's recent posts.
+    Calls the xAI API with the X Search tool enabled, scoped to
+    @grkportfolio, and asks Grok to return structured position data
+    extracted from that account's recent posts.
 
     Returns a dict matching the EXTRACTION_PROMPT's JSON shape.
     Raises requests.HTTPError on a failed API call.
@@ -56,29 +82,28 @@ def fetch_latest_positions() -> dict:
 
     body = {
         "model": "grok-4.3",
-        "messages": [
+        "input": [
             {"role": "user", "content": EXTRACTION_PROMPT}
         ],
-        # NOTE: verify this is still the correct way to request live X-search
-        # in the current xAI API -- some versions of the API expose this as a
-        # top-level "search_parameters" object rather than a "tools" entry.
-        "search_parameters": {
-            "mode": "auto",
-            "sources": [{"type": "x"}]
-        },
+        "tools": [
+            {
+                "type": "x_search",
+                "allowed_x_handles": [GROK_PORTFOLIO_HANDLE],
+            }
+        ],
         "temperature": 0,
     }
 
-    response = requests.post(XAI_ENDPOINT, headers=headers, json=body, timeout=60)
+    response = requests.post(XAI_ENDPOINT, headers=headers, json=body, timeout=90)
     response.raise_for_status()
 
-    raw_content = response.json()["choices"][0]["message"]["content"]
+    raw_content = _extract_text_from_responses_payload(response.json())
 
     try:
         return json.loads(raw_content)
     except json.JSONDecodeError as exc:
         raise ValueError(
-            f"Grok did not return valid JSON. Raw response was:\n{raw_content}"
+            f"Grok did not return valid JSON. Raw text response was:\n{raw_content}"
         ) from exc
 
 
