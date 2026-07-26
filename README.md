@@ -15,8 +15,16 @@ residents.
    the last saved state (`data/latest.json`) to find real position changes.
 3. **Map** (`scripts/ticker_mapping.py`) -- resolves each ticker to its
    Bitget tokenized-stock symbol via `config/ticker_map.json`.
-4. **Size** (`scripts/size_positions.py`) -- converts weight-% changes into
-   USDT trade amounts, sized against your actual sub-account balance.
+4. **Size** (`scripts/size_positions.py`) -- computes each position's
+   *target dollar value* from Grok's weight % against your total portfolio
+   value (cash + current holdings), then buys or sells the difference
+   between that target and what you actually hold. This is a full
+   rebalance model, matching how the real Grok Portfolio itself operates:
+   a fixed starting pool of capital, fully reallocated each cycle, not
+   additive investing of spare cash. A useful side effect: on your very
+   first run (when you hold nothing yet), this naturally buys the entire
+   current 15-position book in one pass -- no separate "initial sync"
+   step needed.
 5. **Execute** (`scripts/execute_trades.py`) -- places orders via Bitget's
    official `bgc` CLI ([Bitget-AI/agent_hub](https://github.com/Bitget-AI/agent_hub)).
 6. **Notify** (`scripts/notify.py`) -- sends a Telegram summary of what
@@ -100,9 +108,19 @@ You can trigger a run manually anytime from the repo's **Actions** tab
   weight sitting idle as USDT instead.
 - **xAI live-search API shape**: flagged inline in
   `fetch_grok_portfolio.py` -- verify against current docs before first run.
-- **`bgc` account-balance and order command shapes**: flagged inline in
+- **`bgc` holdings/balance command shapes**: flagged inline in
   `size_positions.py` and `execute_trades.py` -- run `bgc discover` to
-  confirm exact command/response formats for your installed CLI version.
+  confirm exact command/response formats for your installed CLI version,
+  in particular the command that lists currently-held tokenized-stock
+  positions and their USDT market value, since sizing now depends on
+  knowing what you already hold, not just your cash balance.
+- **Per-trade caps**: `MAX_SINGLE_TRADE_USDT` in `size_positions.py`
+  currently caps any single rebalancing trade at $50 -- useful while
+  testing with small amounts, but means large target-value gaps (e.g.
+  your very first full-book buy, if you've funded the sub-account with
+  more than a few hundred dollars) will take multiple runs to fully catch
+  up rather than happening in one shot. Raise this once you're confident
+  in the pipeline.
 
 ## Disclaimer
 

@@ -11,6 +11,9 @@ concurrency:
   group: grok-mirror
   cancel-in-progress: false
 
+permissions:
+  contents: write   # required so the "commit updated snapshot" step can push back to the repo
+
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
