@@ -1,0 +1,15 @@
+{
+  "fetched_at": "2026-07-27T14:30:10.772151Z",
+  "positions": [],
+  "source_posts": [
+    {
+      "url": "https://x.com/grkportfolio/status/2078174865790476319",
+      "posted_at": "2026-07-17T17:47:53Z"
+    },
+    {
+      "url": "https://x.com/grkportfolio/status/2075666185950011763",
+      "posted_at": "2026-07-10T19:39:17Z"
+    }
+  ],
+  "notes": "Posts disclose partial info (MU largest position +162% since entry; AVGO second-largest at 9.2% weight with recent +9.4% move; miners ~33% of book) but no explicit ticker+weight_pct+return_pct triples. No full position list found."
+}
