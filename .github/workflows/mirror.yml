@@ -61,23 +61,11 @@ jobs:
       - name: Install Bitget Agent CLI (bgc)
         run: npm install -g @bitget-ai/bitget-agent-cli
 
-      - name: Discover bgc account tools (temporary debug)
-        run: |
-          bgc discover --domain account
-          bgc discover --domain trade
-
       - name: Discover bgc command surface (temporary debug)
         run: |
-          bgc discover --help
-          bgc discover --domain account
-          bgc discover --domain trade
-
-      - name: Discover bgc command surface (temporary debug)
-        run: |
-          bgc discover --domain account
-          bgc discover --domain trade
-          bgc discover --domain funds
-          bgc discover --domain subaccount
+          bgc discover --tool account_overview
+          bgc account_overview --coin USDT --pretty
+          bgc discover --tool position --action info
 
       - name: Run the pipeline for this portfolio
         env:
