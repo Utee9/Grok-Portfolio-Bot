@@ -1,131 +1,149 @@
-# Grok Portfolio Mirror
+# Portfolio Mirror
 
-Mirrors @grkportfolio's (Autopilot's "Grok Portfolio," run by Dr. Alejandro
-Lopez-Lira's AI Finance Labs) disclosed stock positions into a Bitget
-tokenized-stocks sub-account, since Bitget's supported brokerages (IBKR,
-Schwab, Fidelity, E*Trade, Vanguard, Robinhood) don't accept Nigerian
-residents.
+Mirrors publicly-disclosed AI-managed stock portfolios (Grok, Claude,
+DeepSeek, GPT -- all run by Dr. Alejandro Lopez-Lira's AI Finance Labs via
+Autopilot) into their own isolated Bitget tokenized-stock sub-accounts,
+since Bitget's supported brokerages don't accept Nigerian residents.
 
-## How it works
+Each portfolio runs as its own independent pipeline: its own data source,
+its own Bitget sub-account, its own dry-run/paper-trading toggle. A bug or
+bad trade in one can never touch another.
 
-1. **Fetch** (`scripts/fetch_grok_portfolio.py`) -- asks Grok (via xAI's API
-   with live X-search) for @grkportfolio's latest posts, extracted as
-   structured JSON.
-2. **Diff** (`scripts/diff_engine.py`) -- compares the new extraction against
-   the last saved state (`data/latest.json`) to find real position changes.
-3. **Map** (`scripts/ticker_mapping.py`) -- resolves each ticker to its
-   Bitget tokenized-stock symbol via `config/ticker_map.json`.
-4. **Size** (`scripts/size_positions.py`) -- computes each position's
-   *target dollar value* from Grok's weight % against your total portfolio
-   value (cash + current holdings), then buys or sells the difference
-   between that target and what you actually hold. This is a full
-   rebalance model, matching how the real Grok Portfolio itself operates:
-   a fixed starting pool of capital, fully reallocated each cycle, not
-   additive investing of spare cash. A useful side effect: on your very
-   first run (when you hold nothing yet), this naturally buys the entire
-   current 15-position book in one pass -- no separate "initial sync"
-   step needed.
-5. **Execute** (`scripts/execute_trades.py`) -- places orders via Bitget's
-   official `bgc` CLI ([Bitget-AI/agent_hub](https://github.com/Bitget-AI/agent_hub)).
-6. **Notify** (`scripts/notify.py`) -- sends a Telegram summary of what
-   happened.
+## Structure
 
-Orchestrated by `scripts/main.py`, run on a schedule by
-`.github/workflows/grok_mirror.yml` (every 6 hours, free on GitHub Actions).
+```
+portfolios/
+  grok/       -- @grkportfolio on X (live, active)
+  claude/     -- @theaiportfolios on X (live, active)
+  deepseek/   -- no dedicated X account; @chatgpttrader-style handle
+                 doesn't exist. Tracked via manual_override.json only.
+  gpt/        -- @chatgpttrader was suspended. Tracked via
+                 manual_override.json only, same as DeepSeek.
 
-## One-time setup
+portfolios/<name>/
+  portfolio.json          -- display name, X handle (or null), secret suffix
+  status.json             -- {"dry_run": bool, "paper_trading": bool}
+  config/ticker_map.json  -- ticker -> Bitget symbol, per portfolio
+  config/manual_override.json -- you edit this by hand, see below
+  data/merged_state.json  -- current reconciled target weights (auto-generated)
+  data/snapshots/         -- full history of every run (auto-generated)
 
-### 1. Bitget
+scripts/
+  portfolio_config.py -- loads a portfolio's config + resolves its secret names
+  fetch_tweets.py      -- xAI live X-search + trade-vs-commentary extraction
+  merge_sources.py     -- reconciles tweet data + manual_override.json per ticker
+  ticker_mapping.py    -- ticker -> Bitget symbol lookup
+  size_positions.py    -- target-weight rebalancing math, sized against that
+                           portfolio's own sub-account
+  execute_trades.py    -- places orders via `bgc`, respects dry_run/paper_trading
+  notify.py             -- Telegram summary, labelled per portfolio
+  main.py               -- orchestrates all of the above for ONE portfolio,
+                           selected via the PORTFOLIO env var
+```
 
-- Create an **Agent trading sub-account** in the Bitget app (Account →
-  Sub-accounts → Create → "Agent trading sub-account") -- this keeps this
-  bot's capital fully isolated from your main account and any other
-  portfolios you add later.
-- Fund it with a small amount of USDT to start.
-- Confirm tokenized stocks are tradeable from within the sub-account
-  before funding it further.
-- Create an API key **scoped to that sub-account** with trade permission.
-  Store the key, secret, and passphrase as GitHub Actions secrets (see below).
+## How data sources are reconciled
 
-### 2. xAI
+Each portfolio's current target weights come from merging up to two
+sources, per ticker, keeping whichever is more recent:
 
-- Create an API key at [console.x.ai](https://console.x.ai).
-- Verify the exact request shape for live X-search against
-  [docs.x.ai](https://docs.x.ai) -- `scripts/fetch_grok_portfolio.py` has a
-  best-effort implementation flagged with comments where the schema may
-  need adjusting.
+1. **Tweets** (`fetch_tweets.py`) -- only for portfolios with a live X
+   account (Grok, Claude). Explicitly classifies each post as either a
+   clean weight disclosure ("NOW is 12.6%") or a narrative action with no
+   weight ("added DHT to hedge") -- narrative actions are surfaced in the
+   Telegram alert but never auto-traded, since there's no reliable size to
+   trade them at.
+2. **Manual override** (`config/manual_override.json`, one per portfolio)
+   -- you edit this whenever you check the Autopilot app. Set `as_of` to
+   today's date and list whatever you see. You don't need to do this
+   consistently or completely -- it only overrides tickers where your
+   manual entry is fresher than what's already known for that ticker.
 
-### 3. Telegram (optional but recommended)
+This is how DeepSeek and GPT get tracked at all, since neither has a live
+public trade feed anymore -- their `portfolio.json` has `"x_handle": null`,
+so `fetch_tweets.py` is skipped entirely for them and they run purely off
+whatever you enter manually.
 
-- Message [@BotFather](https://t.me/BotFather) on Telegram, run `/newbot`,
-  save the token it gives you.
-- Message your new bot once, then fetch your chat ID from
-  `https://api.telegram.org/bot<TOKEN>/getUpdates`.
+## Secrets (GitHub repo Settings -> Secrets and variables -> Actions)
 
-### 4. GitHub repo secrets
-
-In your repo: Settings → Secrets and variables → Actions → New repository
-secret. Add:
-
+Shared across all portfolios:
 - `XAI_API_KEY`
-- `BITGET_API_KEY`
-- `BITGET_SECRET_KEY`
-- `BITGET_PASSPHRASE`
-- `TELEGRAM_BOT_TOKEN` (optional)
-- `TELEGRAM_CHAT_ID` (optional)
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` (optional but recommended)
 
-## Testing before going live
+Grok keeps its **original, already-working, unprefixed** names -- do not
+change these:
+- `BITGET_API_KEY`, `BITGET_SECRET_KEY`, `BITGET_PASSPHRASE`
 
-The workflow ships with `DRY_RUN: 'true'` set in the env block --
-**leave this as `true`** until you've watched several runs complete
-successfully and manually reviewed the Telegram summaries. Dry-run mode
-runs the entire pipeline (fetch, diff, size) but logs what *would* have
-been traded instead of calling `bgc` for real.
+Every other portfolio gets its own suffixed set, so each Bitget sub-account
+stays completely isolated:
+- `BITGET_API_KEY_CLAUDE`, `BITGET_SECRET_KEY_CLAUDE`, `BITGET_PASSPHRASE_CLAUDE`
+- `BITGET_API_KEY_DEEPSEEK`, `BITGET_SECRET_KEY_DEEPSEEK`, `BITGET_PASSPHRASE_DEEPSEEK`
+- `BITGET_API_KEY_GPT`, `BITGET_SECRET_KEY_GPT`, `BITGET_PASSPHRASE_GPT`
 
-Once you're confident:
-1. Flip `DRY_RUN` to `'false'` in the workflow file.
-2. Consider testing one more round with `PAPER_TRADING: 'true'` set as an
-   additional env var, which routes real `bgc` calls to Bitget's sandboxed
-   demo environment instead of your live sub-account.
-3. Only then remove paper-trading and let it touch real funds.
+**You don't need to add DeepSeek's or GPT's Bitget secrets yet.** If
+they're missing, `main.py` automatically falls back to "tracking-only"
+mode for that portfolio -- it still fetches/merges/records target weights
+and sends a Telegram summary, it just skips sizing and trading entirely
+until you've created and funded a sub-account for it.
 
-You can trigger a run manually anytime from the repo's **Actions** tab
-(`workflow_dispatch`), rather than waiting for the next scheduled run.
+## Independent dry-run / paper-trading control
+
+Each portfolio's `status.json` controls its own mode -- completely
+separate from the others:
+
+```json
+{"dry_run": true, "paper_trading": false}
+```
+
+- `dry_run: true` -- runs the full pipeline (fetch, merge, size) but never
+  calls `bgc` for a real order, just logs what it would have done.
+- `paper_trading: true` -- (only relevant once `dry_run` is `false`) routes
+  real `bgc` calls to Bitget's sandboxed demo environment instead of your
+  live sub-account.
+
+Edit `portfolios/<name>/status.json` directly and commit -- e.g. flip
+Claude to live while Grok stays in dry-run, with no workflow or secrets
+changes needed.
+
+## Running
+
+The workflow (`.github/workflows/mirror.yml`) runs all four portfolios as
+parallel, independent jobs every 6 hours. `fail-fast: false` means one
+portfolio failing doesn't cancel the others.
+
+To trigger manually: **Actions tab -> Portfolio Mirror (all portfolios) ->
+Run workflow**. Optionally pick a single portfolio from the dropdown to
+run just that one instead of all four (useful while testing a new one).
+
+To run locally for one portfolio:
+
+```
+PORTFOLIO=claude python scripts/main.py
+```
 
 ## Known limitations / things to revisit
 
-- **Partial tweet extractions**: @grkportfolio doesn't always post the full
-  15-position book in one tweet. `main.py` suppresses "closed position"
-  actions when a new extraction looks partial (fewer than 70% of the
-  previously known position count), to avoid selling off positions that
-  are still held but just weren't mentioned in that particular post. Watch
-  the Telegram summaries for a while to see how often this triggers.
-- **Ticker mapping coverage**: `config/ticker_map.json` only has entries for
-  tickers already seen in earlier research. New tickers Grok picks will show
-  up as "unmapped" in the run summary -- add them to the map as they appear.
-- **Cash-equivalent positions** (e.g. SGOV, T-bill ETFs): Bitget doesn't
-  tokenize these. Current handling just skips them; decide if you want that
-  weight sitting idle as USDT instead.
-- **xAI live-search API shape**: flagged inline in
-  `fetch_grok_portfolio.py` -- verify against current docs before first run.
-- **`bgc` holdings/balance command shapes**: flagged inline in
-  `size_positions.py` and `execute_trades.py` -- run `bgc discover` to
-  confirm exact command/response formats for your installed CLI version,
-  in particular the command that lists currently-held tokenized-stock
-  positions and their USDT market value, since sizing now depends on
-  knowing what you already hold, not just your cash balance.
-- **Per-trade caps**: `MAX_SINGLE_TRADE_USDT` in `size_positions.py`
-  currently caps any single rebalancing trade at $50 -- useful while
-  testing with small amounts, but means large target-value gaps (e.g.
-  your very first full-book buy, if you've funded the sub-account with
-  more than a few hundred dollars) will take multiple runs to fully catch
-  up rather than happening in one shot. Raise this once you're confident
-  in the pipeline.
+- **`bgc` command shapes**: `size_positions.py` / `execute_trades.py`
+  assume specific `bgc` command names and response fields -- confirm with
+  `bgc discover` before relying on any portfolio's real trading.
+- **`MAX_SINGLE_TRADE_USDT` = $50** (in `size_positions.py`, shared across
+  all portfolios currently): caps any single rebalancing trade. A large
+  first-time full-book buy for a well-funded sub-account will take
+  multiple runs to fully catch up. Raise once you trust the pipeline.
+- **DeepSeek/GPT freshness ceiling**: since these are manual-only, their
+  target weights are only ever as fresh as your last edit to their
+  `manual_override.json`. There's no way around this without a live
+  public trade feed for either.
+- **xAI live-search API shape**: flagged inline in `fetch_tweets.py` --
+  xAI's tool APIs have changed before (see the 410 Gone incident this repo
+  already recovered from) and may again.
+- **Concurrent-push handling**: the workflow's commit step does a
+  pull-rebase-retry since all 4 portfolios push to the same repo/branch in
+  parallel. If you add many more portfolios, watch for push contention.
 
 ## Disclaimer
 
-This is a personal automation project mirroring a third party's disclosed
+This is a personal automation project mirroring third parties' disclosed
 trading activity with a delay and independent execution venue. It is not
-financial advice, and past performance of the mirrored portfolio is not
+financial advice, and past performance of any mirrored portfolio is not
 indicative of future results. You are solely responsible for any trades
 this pipeline places on your behalf.

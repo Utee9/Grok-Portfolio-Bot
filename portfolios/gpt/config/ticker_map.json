@@ -1,0 +1,3 @@
+{
+  "_comment": "Map each ticker to its Bitget tokenized-stock symbol. Set null if untradeable/no equivalent yet."
+}

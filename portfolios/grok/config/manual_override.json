@@ -1,0 +1,9 @@
+{
+  "_comment": "Edit this whenever you check the portfolio in the Autopilot app. Set 'as_of' to today's date, and list every position you currently see, sorted highest to lowest for readability (order doesn't matter to the script). You don't need to update this often or completely -- the pipeline merges this with tweet-based data and uses whichever is freshest, per ticker.",
+  "as_of": "2026-07-28",
+  "positions": [
+    {"ticker": "NOW", "weight_pct": 13},
+    {"ticker": "ZETA", "weight_pct": 10},
+    {"ticker": "SGOV", "weight_pct": 14}
+  ]
+}

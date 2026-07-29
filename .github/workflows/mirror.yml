@@ -1,0 +1,88 @@
+name: Portfolio Mirror (all portfolios)
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # every 6 hours
+  workflow_dispatch:
+    inputs:
+      portfolio:
+        description: 'Run only one portfolio (leave blank to run all)'
+        required: false
+        type: choice
+        options: ['', 'grok', 'claude', 'deepseek', 'gpt']
+
+permissions:
+  contents: write
+
+jobs:
+  run-pipeline:
+    strategy:
+      fail-fast: false   # one portfolio failing shouldn't cancel the others
+      matrix:
+        portfolio: [grok, claude, deepseek, gpt]
+    if: ${{ github.event.inputs.portfolio == '' || github.event.inputs.portfolio == matrix.portfolio }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: mirror-${{ matrix.portfolio }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up Node (needed for bgc CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Bitget Agent CLI (bgc)
+        run: npm install -g @bitget-ai/bitget-agent-cli
+
+      - name: Run the pipeline for this portfolio
+        env:
+          PORTFOLIO: ${{ matrix.portfolio }}
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # Grok keeps its ORIGINAL unprefixed secret names -- untouched.
+          BITGET_API_KEY: ${{ secrets.BITGET_API_KEY }}
+          BITGET_SECRET_KEY: ${{ secrets.BITGET_SECRET_KEY }}
+          BITGET_PASSPHRASE: ${{ secrets.BITGET_PASSPHRASE }}
+          # Every other portfolio gets its own suffixed secrets. Any that
+          # aren't set yet (e.g. DeepSeek/GPT before you fund a sub-account)
+          # just come through as empty strings -- main.py detects that and
+          # falls back to tracking-only mode for that portfolio, rather
+          # than failing.
+          BITGET_API_KEY_CLAUDE: ${{ secrets.BITGET_API_KEY_CLAUDE }}
+          BITGET_SECRET_KEY_CLAUDE: ${{ secrets.BITGET_SECRET_KEY_CLAUDE }}
+          BITGET_PASSPHRASE_CLAUDE: ${{ secrets.BITGET_PASSPHRASE_CLAUDE }}
+          BITGET_API_KEY_DEEPSEEK: ${{ secrets.BITGET_API_KEY_DEEPSEEK }}
+          BITGET_SECRET_KEY_DEEPSEEK: ${{ secrets.BITGET_SECRET_KEY_DEEPSEEK }}
+          BITGET_PASSPHRASE_DEEPSEEK: ${{ secrets.BITGET_PASSPHRASE_DEEPSEEK }}
+          BITGET_API_KEY_GPT: ${{ secrets.BITGET_API_KEY_GPT }}
+          BITGET_SECRET_KEY_GPT: ${{ secrets.BITGET_SECRET_KEY_GPT }}
+          BITGET_PASSPHRASE_GPT: ${{ secrets.BITGET_PASSPHRASE_GPT }}
+        run: python scripts/main.py
+
+      - name: Commit this portfolio's updated data
+        run: |
+          git config user.name "portfolio-mirror-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add "portfolios/${{ matrix.portfolio }}/data/"
+          git diff --cached --quiet && echo "No data changes to commit" || \
+            git commit -m "chore(${{ matrix.portfolio }}): update portfolio snapshot [skip ci]"
+          # The 4 matrix jobs run in parallel and may try to push around the
+          # same time -- retry once with a rebase if another job beat us to it.
+          git pull --rebase --autostash origin "${{ github.ref_name }}" && git push || \
+            (git pull --rebase --autostash origin "${{ github.ref_name }}" && git push)

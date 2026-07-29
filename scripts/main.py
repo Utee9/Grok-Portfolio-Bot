@@ -1,95 +1,126 @@
 """
-Entry point for the Grok Portfolio mirror pipeline. Run by GitHub Actions
-on a schedule (see .github/workflows/grok_mirror.yml), or manually with:
+Entry point for the portfolio-mirror pipeline. Runs for exactly ONE
+portfolio per invocation, selected via the PORTFOLIO environment variable
+(e.g. "grok", "claude", "deepseek", "gpt") -- see .github/workflows/
+mirror.yml for how each portfolio gets its own scheduled run.
 
-    python scripts/main.py
+Manual run for a specific portfolio:
+
+    PORTFOLIO=grok python scripts/main.py
 """
 
+import os
 import json
 import datetime
 from pathlib import Path
 
-from fetch_grok_portfolio import fetch_latest_positions
-from diff_engine import load_latest_state, compute_diff, save_latest_state
+from portfolio_config import PortfolioConfig
+from fetch_tweets import fetch_latest_positions
+from merge_sources import (
+    load_merged_state, save_merged_state, merge_source_into_state,
+    load_manual_override, build_target_weights,
+)
 from ticker_mapping import load_ticker_map
 from size_positions import get_account_snapshot, compute_rebalance_trades
 from execute_trades import execute_all
 from notify import send_telegram_message, build_run_summary
 
-SNAPSHOTS_DIR = Path(__file__).parent.parent / "data" / "snapshots"
-
-# If a new extraction has fewer positions than this fraction of the previous
-# book, treat it as a partial tweet (not a full portfolio disclosure) --
-# suppress closing any position not mentioned in it, since a partial post
-# would otherwise make untouched positions look like they were dropped.
 PARTIAL_BOOK_THRESHOLD = 0.7
 
 
-def save_snapshot(current: dict) -> None:
-    SNAPSHOTS_DIR.mkdir(parents=True, exist_ok=True)
+def save_snapshot(portfolio: PortfolioConfig, payload: dict) -> None:
+    portfolio.snapshots_dir.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H-%M-%S")
-    snapshot_path = SNAPSHOTS_DIR / f"{timestamp}.json"
-    snapshot_path.write_text(json.dumps(current, indent=2))
+    (portfolio.snapshots_dir / f"{timestamp}.json").write_text(
+        json.dumps(payload, indent=2, default=str)
+    )
 
 
 def is_partial_book(previous_count: int, current_count: int) -> bool:
     if previous_count == 0:
-        return False  # first-ever run -- nothing to compare against, and
-                       # we WANT the full initial buy to go through
+        return False
     return current_count < previous_count * PARTIAL_BOOK_THRESHOLD
 
 
 def main() -> None:
-    previous_state = load_latest_state()
-
-    print("[main] Fetching latest Grok portfolio data...")
-    current_extraction = fetch_latest_positions()
-
-    current_state = {
-        "fetched_at": datetime.datetime.utcnow().isoformat() + "Z",
-        "positions": current_extraction.get("positions", []),
-        "source_posts": current_extraction.get("source_posts", []),
-        "notes": current_extraction.get("notes", ""),
-    }
-
-    save_snapshot(current_state)
-
-    # Kept for the run summary / visibility into what changed, even though
-    # trade sizing itself now works off absolute target weights rather than
-    # these deltas directly.
-    changes = compute_diff(previous_state, current_state)
-
-    partial = is_partial_book(
-        len(previous_state.get("positions", [])),
-        len(current_state.get("positions", [])),
-    )
-    if partial:
-        print(
-            "[main] New extraction looks like a partial update "
-            f"({len(current_state['positions'])} positions vs "
-            f"{len(previous_state['positions'])} previously). "
-            "Closures will be suppressed this run."
+    portfolio_name = os.environ.get("PORTFOLIO")
+    if not portfolio_name:
+        raise RuntimeError(
+            "PORTFOLIO environment variable not set. "
+            "Expected one of: grok, claude, deepseek, gpt."
         )
 
-    if not current_state["positions"]:
-        print("[main] No positions extracted this run -- nothing to do.")
-        send_telegram_message(build_run_summary([], [], changes))
+    portfolio = PortfolioConfig(portfolio_name)
+    print(f"[main] Running pipeline for: {portfolio.display_name} "
+          f"(dry_run={portfolio.dry_run}, paper_trading={portfolio.paper_trading})")
+
+    merged_state = load_merged_state(portfolio.merged_state_path)
+    previous_ticker_count = len(merged_state)
+
+    if portfolio.x_handle:
+        print(f"[main] Fetching latest tweet-based extraction for @{portfolio.x_handle}...")
+    else:
+        print("[main] No X handle configured for this portfolio -- manual-only mode.")
+    extraction = fetch_latest_positions(portfolio.x_handle)
+    tweet_positions = extraction.get("positions", [])
+    narrative_actions = extraction.get("narrative_actions", [])
+
+    today = datetime.date.today()
+    if tweet_positions:
+        merged_state = merge_source_into_state(merged_state, tweet_positions, today, source="twitter")
+
+    manual = load_manual_override(portfolio.manual_override_path)
+    if manual:
+        manual_positions, manual_as_of = manual
+        print(f"[main] Merging manual override (as_of {manual_as_of})...")
+        merged_state = merge_source_into_state(merged_state, manual_positions, manual_as_of, source="manual")
+
+    save_snapshot(portfolio, {
+        "fetched_at": datetime.datetime.utcnow().isoformat() + "Z",
+        "tweet_extraction": extraction,
+        "manual_override_used": manual is not None,
+        "merged_state": merged_state,
+    })
+
+    partial = is_partial_book(previous_ticker_count, len(merged_state))
+    if partial:
+        print(
+            f"[main] Merged target list looks partial ({len(merged_state)} "
+            f"tickers vs {previous_ticker_count} previously). Closures suppressed this run."
+        )
+
+    if narrative_actions:
+        print(f"[main] {len(narrative_actions)} narrative action(s) mentioned with no "
+              f"weight -- alerting only, not auto-trading these.")
+
+    target_weights = build_target_weights(merged_state)
+
+    if not target_weights:
+        print("[main] No target weights known yet -- nothing to do.")
+        send_telegram_message(build_run_summary(portfolio.display_name, {}, [], [], narrative_actions))
         return
 
-    target_weights = {p["ticker"]: p["weight_pct"] for p in current_state["positions"]}
-    ticker_map = load_ticker_map()
-
-    unmapped = [
-        {"ticker": t, "action": "unmapped"}
-        for t in target_weights
-        if not ticker_map.get(t)
-    ]
+    ticker_map = load_ticker_map(portfolio.ticker_map_path)
+    unmapped = [t for t in target_weights if not ticker_map.get(t)]
     if unmapped:
-        print(f"[main] {len(unmapped)} ticker(s) have no Bitget mapping: "
-              f"{[u['ticker'] for u in unmapped]}")
+        print(f"[main] {len(unmapped)} ticker(s) have no Bitget mapping: {unmapped}")
+
+    if not portfolio.has_bitget_credentials():
+        print(
+            f"[main] No Bitget credentials configured for '{portfolio.name}' yet -- "
+            f"tracking-only mode. Target weights recorded, no trades computed or placed."
+        )
+        summary = build_run_summary(
+            portfolio.display_name, target_weights, [], unmapped,
+            narrative_actions, tracking_only=True,
+        )
+        print(summary)
+        send_telegram_message(summary)
+        save_merged_state(portfolio.merged_state_path, merged_state)
+        return
 
     print("[main] Fetching current sub-account snapshot (cash + holdings)...")
-    snapshot = get_account_snapshot()
+    snapshot = get_account_snapshot(portfolio)
     print(f"[main] Total portfolio value: {snapshot['total_value_usdt']} USDT "
           f"(cash: {snapshot['cash_usdt']} USDT)")
 
@@ -101,13 +132,13 @@ def main() -> None:
     )
     print(f"[main] Rebalancing produced {len(trades)} trade(s) after min/max filters.")
 
-    execution_results = execute_all(trades)
+    execution_results = execute_all(trades, portfolio)
 
-    summary = build_run_summary(execution_results, unmapped, changes)
+    summary = build_run_summary(portfolio.display_name, target_weights, execution_results, unmapped, narrative_actions)
     print(summary)
     send_telegram_message(summary)
 
-    save_latest_state(current_state)
+    save_merged_state(portfolio.merged_state_path, merged_state)
 
 
 if __name__ == "__main__":

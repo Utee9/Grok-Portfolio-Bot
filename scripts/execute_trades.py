@@ -1,20 +1,24 @@
 """
-Executes a list of sized trades via `bgc`. Respects DRY_RUN so you can
-rehearse the full pipeline (fetch -> diff -> size -> "execute") without
-ever placing a real order, and separately respects Bitget's own
---paper-trading demo-account mode if you want a step above dry-run that
-still hits a real (sandboxed) order book.
+Executes a list of sized trades via `bgc`, scoped to a specific portfolio's
+Bitget sub-account credentials. Respects that portfolio's own dry_run /
+paper_trading flags (from its status.json, see portfolio_config.py) --
+each portfolio can be independently toggled between dry-run, paper
+trading, and live.
 """
 
 import os
 import subprocess
 
 
-def execute_trade(trade: dict, dry_run: bool, paper_trading: bool) -> dict:
-    """
-    Places a single market order for `trade` via bgc. Returns a result dict
-    for logging/notification purposes.
-    """
+def _bgc_env(portfolio) -> dict:
+    env = os.environ.copy()
+    env["BITGET_API_KEY"] = portfolio.get_required_env("BITGET_API_KEY")
+    env["BITGET_SECRET_KEY"] = portfolio.get_required_env("BITGET_SECRET_KEY")
+    env["BITGET_PASSPHRASE"] = portfolio.get_required_env("BITGET_PASSPHRASE")
+    return env
+
+
+def execute_trade(trade: dict, portfolio) -> dict:
     verb = "order market_buy" if trade["side"] == "buy" else "order market_sell"
 
     command = [
@@ -22,17 +26,13 @@ def execute_trade(trade: dict, dry_run: bool, paper_trading: bool) -> dict:
         "--symbol", trade["bitget_symbol"],
         "--quote-amount", str(trade["usdt_amount"]),
     ]
-    if paper_trading:
+    if portfolio.paper_trading:
         command.append("--paper-trading")
 
-    if dry_run:
-        return {
-            **trade,
-            "status": "dry_run_skipped",
-            "command": " ".join(command),
-        }
+    if portfolio.dry_run:
+        return {**trade, "status": "dry_run_skipped", "command": " ".join(command)}
 
-    result = subprocess.run(command, capture_output=True, text=True)
+    result = subprocess.run(command, capture_output=True, text=True, env=_bgc_env(portfolio))
 
     return {
         **trade,
@@ -42,11 +42,5 @@ def execute_trade(trade: dict, dry_run: bool, paper_trading: bool) -> dict:
     }
 
 
-def execute_all(trades: list[dict]) -> list[dict]:
-    dry_run = os.environ.get("DRY_RUN", "true").lower() == "true"
-    paper_trading = os.environ.get("PAPER_TRADING", "false").lower() == "true"
-
-    results = []
-    for trade in trades:
-        results.append(execute_trade(trade, dry_run=dry_run, paper_trading=paper_trading))
-    return results
+def execute_all(trades: list[dict], portfolio) -> list[dict]:
+    return [execute_trade(trade, portfolio) for trade in trades]
