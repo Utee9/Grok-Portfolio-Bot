@@ -27,23 +27,9 @@ def _bgc_env(portfolio) -> dict:
     return env
 
 
-def get_account_snapshot(portfolio) -> dict:
-    """
-    Returns {"cash_usdt": float, "holdings_by_symbol": {...}, "total_value_usdt": float}
-    for this portfolio's specific Bitget sub-account.
-
-    NOTE: verify exact `bgc` command names/response shapes with `bgc discover`.
-    """
-    env = _bgc_env(portfolio)
-    cash = _get_cash_balance(env)
-    holdings = _get_holdings_value_by_symbol(env)
-    total = cash + sum(holdings.values())
-    return {"cash_usdt": cash, "holdings_by_symbol": holdings, "total_value_usdt": total}
-
-
 def _run_bgc(args: list[str], env: dict) -> dict:
     result = subprocess.run(
-        ["bgc", *args, "--pretty=false"],
+        ["bgc", *args],
         capture_output=True, text=True, env=env,
     )
     if result.returncode != 0:
@@ -55,23 +41,38 @@ def _run_bgc(args: list[str], env: dict) -> dict:
     return json.loads(result.stdout)
 
 
-def _get_cash_balance(env: dict) -> float:
-    data = _run_bgc(["account", "account_overview"], env)
-    usdt_entry = next((a for a in data["data"] if a.get("coin") == "USDT"), None)
-    if usdt_entry is None:
-        raise RuntimeError("Could not find a USDT balance in account overview response")
-    return float(usdt_entry["available"])
+def get_account_snapshot(portfolio) -> dict:
+    """
+    Returns {"cash_usdt": float, "holdings_by_symbol": {...}, "total_value_usdt": float}
+    for this portfolio's specific Bitget sub-account.
 
+    Uses the composite `account_overview` call, whose `assets` section lists
+    every coin the account holds (cash + any tokenized stock/ETF positions)
+    in one shot -- no separate positions call needed for a spot-style account.
+    """
+    env = _bgc_env(portfolio)
+    response = _run_bgc(["account_overview"], env)
+    assets_section = response.get("data", {}).get("assets", {})
 
-def _get_holdings_value_by_symbol(env: dict) -> dict:
-    data = _run_bgc(["position", "all_position"], env)
+    if not assets_section.get("ok"):
+        raise RuntimeError(
+            f"account_overview 'assets' section failed: {assets_section.get('error')}"
+        )
+
+    cash = 0.0
     holdings = {}
-    for pos in data.get("data", []):
-        symbol = pos.get("symbol")
-        value = float(pos.get("usdtValue", pos.get("marketValue", 0)) or 0)
-        if symbol and value > 0:
-            holdings[symbol] = value
-    return holdings
+    for entry in assets_section["data"].get("assets", []):
+        coin = entry.get("coin")
+        if coin == "USDT":
+            cash = float(entry.get("available", 0) or 0)
+        else:
+            value = float(entry.get("usdValue", 0) or 0)
+            if coin and value > 0:
+                holdings[coin] = value
+
+    total = cash + sum(holdings.values())
+    return {"cash_usdt": cash, "holdings_by_symbol": holdings, "total_value_usdt": total}
+
 
 def compute_rebalance_trades(
     target_weights: dict,
