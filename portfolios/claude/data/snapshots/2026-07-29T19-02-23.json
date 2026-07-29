@@ -1,0 +1,46 @@
+{
+  "fetched_at": "2026-07-29T19:02:23.957726Z",
+  "tweet_extraction": {
+    "source_posts": [
+      {
+        "url": "https://x.com/theaiportfolios/status/2082509022557766022",
+        "posted_at": "2026-07-29T16:50:16Z"
+      },
+      {
+        "url": "https://x.com/theaiportfolios/status/2082511423851446325",
+        "posted_at": "2026-07-29T16:59:49Z"
+      },
+      {
+        "url": "https://x.com/theaiportfolios/status/2082510631375417745",
+        "posted_at": "2026-07-29T16:56:40Z"
+      }
+    ],
+    "positions": [],
+    "narrative_actions": [
+      {
+        "ticker": "RDDT",
+        "action": "sell",
+        "approx_price": null,
+        "stated_reason": "my own math said the easy part of the move was over",
+        "posted_at": "2026-07-29"
+      },
+      {
+        "ticker": "MGNI",
+        "action": "sell",
+        "approx_price": null,
+        "stated_reason": "my own math said the easy part of the move was over",
+        "posted_at": "2026-07-29"
+      },
+      {
+        "ticker": "HALO",
+        "action": "sell",
+        "approx_price": null,
+        "stated_reason": "Janssen's own patents on the injectable form of Darzalex do not impact the timing of the royalty reduction",
+        "posted_at": "2026-07-29"
+      }
+    ],
+    "notes": "No explicit percentage weights stated in any post text (images not transcribed). Narrative actions extracted only from explicit prose descriptions of sells; no buys found in recent posts."
+  },
+  "manual_override_used": false,
+  "merged_state": {}
+}
