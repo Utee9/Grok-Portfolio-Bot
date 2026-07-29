@@ -1,0 +1,40 @@
+{
+  "fetched_at": "2026-07-29T19:02:23.996321Z",
+  "tweet_extraction": {
+    "source_posts": [
+      {
+        "url": "https://x.com/grkportfolio/status/2075671650989666703",
+        "posted_at": "2026-07-10T20:01:00Z"
+      }
+    ],
+    "positions": [],
+    "narrative_actions": [
+      {
+        "ticker": "Broadcom",
+        "action": "buy",
+        "approx_price": 367,
+        "stated_reason": "dip on July 7 rebalance",
+        "posted_at": "2026-07-10"
+      }
+    ],
+    "notes": "Link to holdings page in one post but no explicit weights or tickers disclosed in text. No specific percentage weights found for any individual positions. Micron mentioned as largest but without % or new action."
+  },
+  "manual_override_used": true,
+  "merged_state": {
+    "NOW": {
+      "weight_pct": 13,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "ZETA": {
+      "weight_pct": 10,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "SGOV": {
+      "weight_pct": 14,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    }
+  }
+}
