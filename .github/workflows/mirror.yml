@@ -61,14 +61,6 @@ jobs:
       - name: Install Bitget Agent CLI (bgc)
         run: npm install -g @bitget-ai/bitget-agent-cli
 
-      - name: Discover bgc command surface (temporary debug)
-        env:
-          BITGET_API_KEY: ${{ secrets.BITGET_API_KEY }}
-          BITGET_SECRET_KEY: ${{ secrets.BITGET_SECRET_KEY }}
-          BITGET_PASSPHRASE: ${{ secrets.BITGET_PASSPHRASE }}
-        run: |
-          bgc account_overview --coin USDT --category SPOT --pretty
-
       - name: Run the pipeline for this portfolio
         env:
           PORTFOLIO: ${{ matrix.portfolio }}
