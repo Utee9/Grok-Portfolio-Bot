@@ -41,12 +41,22 @@ def get_account_snapshot(portfolio) -> dict:
     return {"cash_usdt": cash, "holdings_by_symbol": holdings, "total_value_usdt": total}
 
 
-def _get_cash_balance(env: dict) -> float:
+def _run_bgc(args: list[str], env: dict) -> dict:
     result = subprocess.run(
-        ["bgc", "account", "account_overview", "--pretty=false"],
-        capture_output=True, text=True, check=True, env=env,
+        ["bgc", *args, "--pretty=false"],
+        capture_output=True, text=True, env=env,
     )
-    data = json.loads(result.stdout)
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"bgc {' '.join(args)} failed (exit {result.returncode})\n"
+            f"stdout: {result.stdout.strip()}\n"
+            f"stderr: {result.stderr.strip()}"
+        )
+    return json.loads(result.stdout)
+
+
+def _get_cash_balance(env: dict) -> float:
+    data = _run_bgc(["account", "account_overview"], env)
     usdt_entry = next((a for a in data["data"] if a.get("coin") == "USDT"), None)
     if usdt_entry is None:
         raise RuntimeError("Could not find a USDT balance in account overview response")
@@ -54,12 +64,7 @@ def _get_cash_balance(env: dict) -> float:
 
 
 def _get_holdings_value_by_symbol(env: dict) -> dict:
-    result = subprocess.run(
-        ["bgc", "position", "all_position", "--pretty=false"],
-        capture_output=True, text=True, check=True, env=env,
-    )
-    data = json.loads(result.stdout)
-
+    data = _run_bgc(["position", "all_position"], env)
     holdings = {}
     for pos in data.get("data", []):
         symbol = pos.get("symbol")
@@ -67,7 +72,6 @@ def _get_holdings_value_by_symbol(env: dict) -> dict:
         if symbol and value > 0:
             holdings[symbol] = value
     return holdings
-
 
 def compute_rebalance_trades(
     target_weights: dict,
