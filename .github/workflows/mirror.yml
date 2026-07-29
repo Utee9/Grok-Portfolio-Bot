@@ -15,18 +15,30 @@ permissions:
   contents: write
 
 jobs:
+  compute-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      portfolios: ${{ steps.set.outputs.portfolios }}
+    steps:
+      - id: set
+        run: |
+          if [ -z "${{ github.event.inputs.portfolio }}" ]; then
+            echo 'portfolios=["grok","claude","deepseek","gpt"]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'portfolios=["${{ github.event.inputs.portfolio }}"]' >> "$GITHUB_OUTPUT"
+          fi
+
   run-pipeline:
+    needs: compute-matrix
     strategy:
-      fail-fast: false   # one portfolio failing shouldn't cancel the others
+      fail-fast: false
       matrix:
-        portfolio: [grok, claude, deepseek, gpt]
-    if: ${{ github.event.inputs.portfolio == '' || github.event.inputs.portfolio == matrix.portfolio }}
+        portfolio: ${{ fromJson(needs.compute-matrix.outputs.portfolios) }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency:
       group: mirror-${{ matrix.portfolio }}
       cancel-in-progress: false
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
