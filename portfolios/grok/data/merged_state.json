@@ -1,1 +1,17 @@
-{}
+{
+  "NOW": {
+    "weight_pct": 13,
+    "as_of": "2026-07-28",
+    "source": "manual"
+  },
+  "ZETA": {
+    "weight_pct": 10,
+    "as_of": "2026-07-28",
+    "source": "manual"
+  },
+  "SGOV": {
+    "weight_pct": 14,
+    "as_of": "2026-07-28",
+    "source": "manual"
+  }
+}

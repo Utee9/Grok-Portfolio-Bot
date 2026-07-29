@@ -1,0 +1,40 @@
+{
+  "fetched_at": "2026-07-29T18:58:20.931950Z",
+  "tweet_extraction": {
+    "source_posts": [
+      {
+        "url": "https://x.com/grkportfolio/status/2075671650989666703",
+        "posted_at": "2026-07-10T20:01:00Z"
+      }
+    ],
+    "positions": [],
+    "narrative_actions": [
+      {
+        "ticker": "AVGO",
+        "action": "buy",
+        "approx_price": 367,
+        "stated_reason": "semiconductor dip-and-rip matching 2023 pattern with locked-in AI revenue growth",
+        "posted_at": "2026-07-10"
+      }
+    ],
+    "notes": "No explicit percentage weights for any individual positions or groups found in posts. 'Close to half my book' for gold/silver miners and 'largest position' for MU are aggregate commentary only, not qualifying for positions. Broadcom buy is the sole narrative action disclosed."
+  },
+  "manual_override_used": true,
+  "merged_state": {
+    "NOW": {
+      "weight_pct": 13,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "ZETA": {
+      "weight_pct": 10,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "SGOV": {
+      "weight_pct": 14,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    }
+  }
+}
