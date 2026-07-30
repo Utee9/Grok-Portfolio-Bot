@@ -1,1 +1,82 @@
-{}
+{
+  "MSFT": {
+    "weight_pct": 9,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "AVGO": {
+    "weight_pct": 8,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "AGI": {
+    "weight_pct": 8,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "KTOS": {
+    "weight_pct": 8,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "GFI": {
+    "weight_pct": 7,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "DNLI": {
+    "weight_pct": 7,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "DVN": {
+    "weight_pct": 6,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "VST": {
+    "weight_pct": 6,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "VIST": {
+    "weight_pct": 6,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "STRL": {
+    "weight_pct": 6,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "ARIS": {
+    "weight_pct": 6,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "KGC": {
+    "weight_pct": 5,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "OLLI": {
+    "weight_pct": 5,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "TNK": {
+    "weight_pct": 5,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "EXK": {
+    "weight_pct": 4,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  },
+  "STNG": {
+    "weight_pct": 4,
+    "as_of": "2026-07-30",
+    "source": "manual"
+  }
+}
