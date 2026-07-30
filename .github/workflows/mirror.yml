@@ -61,9 +61,9 @@ jobs:
       - name: Install Bitget Agent CLI (bgc)
         run: npm install -g @bitget-ai/bitget-agent-cli
 
-      - name: Discover market instrument lookup
-        run: bgc discover --tool market --action instruments
-
+      - name: Discover order placement params
+        run: bgc discover --tool order --action place
+        
       - name: Run the pipeline for this portfolio
         env:
           PORTFOLIO: ${{ matrix.portfolio }}
