@@ -68,7 +68,7 @@ jobs:
         run: bgc discover --tool market --action tickers
 
       - name: Discover market ticker response shape
-        run: bgc market --action tickers --category SPOT --symbol AVGOx
+        run: bgc market --action tickers --category SPOT --symbol NOWx
         
       - name: Run the pipeline for this portfolio
         env:
