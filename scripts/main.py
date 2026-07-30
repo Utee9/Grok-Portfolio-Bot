@@ -94,6 +94,11 @@ def main() -> None:
               f"weight -- alerting only, not auto-trading these.")
 
     target_weights = build_target_weights(merged_state)
+    
+    if not target_weights:
+        print("[main] No target weights known yet -- nothing to do.")
+        send_telegram_message(build_run_summary(portfolio.display_name, {}, [], [], narrative_actions))
+        return
 
     WEIGHT_SUM_TOLERANCE_PCT = 0.5  # below this, treat as float noise, don't bother logging
 
