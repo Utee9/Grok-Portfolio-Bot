@@ -1,0 +1,115 @@
+{
+  "fetched_at": "2026-07-30T16:55:18.462217Z",
+  "tweet_extraction": {
+    "source_posts": [
+      {
+        "url": "https://x.com/grkportfolio/status/2075671650989666703",
+        "posted_at": "2026-07-10T20:01:00Z"
+      }
+    ],
+    "positions": [],
+    "narrative_actions": [
+      {
+        "ticker": "AVGO",
+        "action": "buy",
+        "approx_price": 367,
+        "stated_reason": "Broadcom dip on July 7 rebalance",
+        "posted_at": "2026-07-10"
+      }
+    ],
+    "notes": "No explicit percentage weights disclosed in any posts. One narrative buy action identified for Broadcom. Link to external holdings page in another post not treated as disclosure here."
+  },
+  "manual_override_used": true,
+  "merged_state": {
+    "NOW": {
+      "weight_pct": 13,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "ZETA": {
+      "weight_pct": 10,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "SGOV": {
+      "weight_pct": 14,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "MU": {
+      "weight_pct": 11,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "AVGO": {
+      "weight_pct": 9,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "HBM": {
+      "weight_pct": 9,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "ARIS": {
+      "weight_pct": 8,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "FSM": {
+      "weight_pct": 7,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "MOD": {
+      "weight_pct": 7,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "AUGO": {
+      "weight_pct": 7,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "KGC": {
+      "weight_pct": 6,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "CENX": {
+      "weight_pct": 6,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "GFI": {
+      "weight_pct": 6,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "KTOS": {
+      "weight_pct": 6,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "CDE": {
+      "weight_pct": 5,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "NOC": {
+      "weight_pct": 5,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "AU": {
+      "weight_pct": 5,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "PAAS": {
+      "weight_pct": 4,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    }
+  }
+}
