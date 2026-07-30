@@ -1,0 +1,177 @@
+{
+  "fetched_at": "2026-07-30T08:29:30.826836Z",
+  "tweet_extraction": {
+    "source_posts": [
+      {
+        "url": "https://x.com/theaiportfolios/status/2082731447761477714",
+        "posted_at": "2026-07-30T07:34:07Z"
+      },
+      {
+        "url": "https://x.com/theaiportfolios/status/2082728407012692378",
+        "posted_at": "2026-07-30T07:22:02Z"
+      }
+    ],
+    "positions": [
+      {
+        "ticker": "SGOV",
+        "weight_pct": 24.9,
+        "return_pct": null
+      },
+      {
+        "ticker": "ZETA",
+        "weight_pct": 10.4,
+        "return_pct": null
+      },
+      {
+        "ticker": "NOW",
+        "weight_pct": 9.8,
+        "return_pct": null
+      },
+      {
+        "ticker": "VST",
+        "weight_pct": 8.5,
+        "return_pct": null
+      },
+      {
+        "ticker": "ICE",
+        "weight_pct": 6.0,
+        "return_pct": null
+      },
+      {
+        "ticker": "PGY",
+        "weight_pct": 5.7,
+        "return_pct": null
+      },
+      {
+        "ticker": "DHT",
+        "weight_pct": 5.2,
+        "return_pct": null
+      },
+      {
+        "ticker": "KGC",
+        "weight_pct": 5.0,
+        "return_pct": null
+      },
+      {
+        "ticker": "ARIS",
+        "weight_pct": 4.6,
+        "return_pct": null
+      },
+      {
+        "ticker": "LPLA",
+        "weight_pct": 4.6,
+        "return_pct": null
+      },
+      {
+        "ticker": "ARDX",
+        "weight_pct": 4.6,
+        "return_pct": null
+      },
+      {
+        "ticker": "INTR",
+        "weight_pct": 4.4,
+        "return_pct": null
+      },
+      {
+        "ticker": "KTOS",
+        "weight_pct": 3.7,
+        "return_pct": null
+      },
+      {
+        "ticker": "QXO",
+        "weight_pct": 2.6,
+        "return_pct": null
+      }
+    ],
+    "narrative_actions": [
+      {
+        "ticker": "HALO",
+        "action": "sell",
+        "approx_price": null,
+        "stated_reason": "full exit near all-time high, locked in double-digit profits",
+        "posted_at": "2026-07-30T07:22:02Z"
+      },
+      {
+        "ticker": "NOW",
+        "action": "sell",
+        "approx_price": null,
+        "stated_reason": "trim of winner into strength before Fed and mega-cap earnings",
+        "posted_at": "2026-07-30T07:22:02Z"
+      }
+    ],
+    "notes": "Weight table is complete and explicit for all 14 positions; narrative post describes two sells (one full exit, one trim) with no weights or prices stated in prose. No other recent posts disclose portfolio activity."
+  },
+  "manual_override_used": false,
+  "merged_state": {
+    "SGOV": {
+      "weight_pct": 24.9,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "ZETA": {
+      "weight_pct": 10.4,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "NOW": {
+      "weight_pct": 9.8,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "VST": {
+      "weight_pct": 8.5,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "ICE": {
+      "weight_pct": 6.0,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "PGY": {
+      "weight_pct": 5.7,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "DHT": {
+      "weight_pct": 5.2,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "KGC": {
+      "weight_pct": 5.0,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "ARIS": {
+      "weight_pct": 4.6,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "LPLA": {
+      "weight_pct": 4.6,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "ARDX": {
+      "weight_pct": 4.6,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "INTR": {
+      "weight_pct": 4.4,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "KTOS": {
+      "weight_pct": 3.7,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "QXO": {
+      "weight_pct": 2.6,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    }
+  }
+}
