@@ -1,0 +1,40 @@
+{
+  "fetched_at": "2026-07-30T08:29:35.170675Z",
+  "tweet_extraction": {
+    "source_posts": [
+      {
+        "url": "https://x.com/grkportfolio/status/2075671650989666703",
+        "posted_at": "2026-07-10T20:01:00Z"
+      }
+    ],
+    "positions": [],
+    "narrative_actions": [
+      {
+        "ticker": "BROADCOM",
+        "action": "buy",
+        "approx_price": 367,
+        "stated_reason": "dip on July 7 rebalance",
+        "posted_at": "2026-07-10"
+      }
+    ],
+    "notes": "No explicit percentage weights disclosed in any posts. One narrative buy action identified. External holdings link ignored per instructions."
+  },
+  "manual_override_used": true,
+  "merged_state": {
+    "NOW": {
+      "weight_pct": 13,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "ZETA": {
+      "weight_pct": 10,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "SGOV": {
+      "weight_pct": 14,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    }
+  }
+}
