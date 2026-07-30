@@ -1,0 +1,11 @@
+{
+  "fetched_at": "2026-07-30T02:32:10.051644Z",
+  "tweet_extraction": {
+    "source_posts": [],
+    "positions": [],
+    "narrative_actions": [],
+    "notes": "No posts contain explicit ticker-specific weight percentages or new prose buy/sell disclosures meeting the criteria (replies and general commentary/performance summaries excluded; image-based holdings not extractable from text)."
+  },
+  "manual_override_used": false,
+  "merged_state": {}
+}
