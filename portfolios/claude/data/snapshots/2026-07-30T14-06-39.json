@@ -1,0 +1,174 @@
+{
+  "fetched_at": "2026-07-30T14:06:39.248932Z",
+  "tweet_extraction": {
+    "source_posts": [
+      {
+        "url": "https://x.com/theaiportfolios/status/2082731447761477714",
+        "posted_at": "2026-07-30T07:34:07Z"
+      },
+      {
+        "url": "https://x.com/theaiportfolios/status/2082728407012692378",
+        "posted_at": "2026-07-30T07:22:02Z"
+      },
+      {
+        "url": "https://x.com/theaiportfolios/status/2082750020529660209",
+        "posted_at": "2026-07-30T08:47:55Z"
+      }
+    ],
+    "positions": [
+      {
+        "ticker": "SGOV",
+        "weight_pct": 24.9
+      },
+      {
+        "ticker": "ZETA",
+        "weight_pct": 10.4
+      },
+      {
+        "ticker": "NOW",
+        "weight_pct": 9.8
+      },
+      {
+        "ticker": "VST",
+        "weight_pct": 8.5
+      },
+      {
+        "ticker": "ICE",
+        "weight_pct": 6.0
+      },
+      {
+        "ticker": "PGY",
+        "weight_pct": 5.7
+      },
+      {
+        "ticker": "DHT",
+        "weight_pct": 5.2
+      },
+      {
+        "ticker": "KGC",
+        "weight_pct": 5.0
+      },
+      {
+        "ticker": "ARIS",
+        "weight_pct": 4.6
+      },
+      {
+        "ticker": "LPLA",
+        "weight_pct": 4.6
+      },
+      {
+        "ticker": "ARDX",
+        "weight_pct": 4.6
+      },
+      {
+        "ticker": "INTR",
+        "weight_pct": 4.4
+      },
+      {
+        "ticker": "KTOS",
+        "weight_pct": 3.7
+      },
+      {
+        "ticker": "QXO",
+        "weight_pct": 2.6
+      }
+    ],
+    "narrative_actions": [
+      {
+        "ticker": "HALO",
+        "action": "sell",
+        "approx_price": null,
+        "stated_reason": "full exit near all-time high after double-digit gain",
+        "posted_at": "2026-07-30"
+      },
+      {
+        "ticker": "NOW",
+        "action": "sell",
+        "approx_price": null,
+        "stated_reason": "trim of winner still held as large position",
+        "posted_at": "2026-07-30"
+      },
+      {
+        "ticker": "DHT",
+        "action": "buy",
+        "approx_price": null,
+        "stated_reason": "oil and geopolitics hedge with double-digit yield at entry",
+        "posted_at": "2026-07-30"
+      }
+    ],
+    "notes": "Weight table from post 8 is complete and explicit; no return_pct values stated anywhere. DHT buy mentioned in reply post 2; sales in post 9. Post 0 mentions ~25% T-bills but superseded by exact table."
+  },
+  "manual_override_used": false,
+  "merged_state": {
+    "SGOV": {
+      "weight_pct": 24.9,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "ZETA": {
+      "weight_pct": 10.4,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "NOW": {
+      "weight_pct": 9.8,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "VST": {
+      "weight_pct": 8.5,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "ICE": {
+      "weight_pct": 6.0,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "PGY": {
+      "weight_pct": 5.7,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "DHT": {
+      "weight_pct": 5.2,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "KGC": {
+      "weight_pct": 5.0,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "ARIS": {
+      "weight_pct": 4.6,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "LPLA": {
+      "weight_pct": 4.6,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "ARDX": {
+      "weight_pct": 4.6,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "INTR": {
+      "weight_pct": 4.4,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "KTOS": {
+      "weight_pct": 3.7,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    },
+    "QXO": {
+      "weight_pct": 2.6,
+      "as_of": "2026-07-30",
+      "source": "twitter"
+    }
+  }
+}
