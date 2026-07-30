@@ -95,10 +95,16 @@ def main() -> None:
 
     target_weights = build_target_weights(merged_state)
 
-    if not target_weights:
-        print("[main] No target weights known yet -- nothing to do.")
-        send_telegram_message(build_run_summary(portfolio.display_name, {}, [], [], narrative_actions))
-        return
+    WEIGHT_SUM_TOLERANCE_PCT = 0.5  # below this, treat as float noise, don't bother logging
+
+    raw_total_pct = sum(target_weights.values())
+    if abs(raw_total_pct - 100) > WEIGHT_SUM_TOLERANCE_PCT:
+        target_weights = normalize_target_weights(target_weights)
+        print(
+            f"[main] Target weights summed to {raw_total_pct:.1f}%, not 100% -- "
+            f"normalized proportionally so this run still trades against a "
+            f"clean 100% total."
+        )
 
     ticker_map = load_ticker_map(portfolio.ticker_map_path)
     cash_proxies = load_cash_proxies(portfolio.ticker_map_path)
