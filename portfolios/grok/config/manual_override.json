@@ -2,8 +2,20 @@
   "_comment": "Edit this whenever you check the portfolio in the Autopilot app. Set 'as_of' to today's date, and list every position you currently see, sorted highest to lowest for readability (order doesn't matter to the script). You don't need to update this often or completely -- the pipeline merges this with tweet-based data and uses whichever is freshest, per ticker.",
   "as_of": "2026-07-28",
   "positions": [
-    {"ticker": "NOW", "weight_pct": 13},
-    {"ticker": "ZETA", "weight_pct": 10},
-    {"ticker": "SGOV", "weight_pct": 14}
+    {"ticker": "MU", "weight_pct": 11},
+    {"ticker": "AVGO", "weight_pct": 9},
+    {"ticker": "HBM", "weight_pct": 9},
+    {"ticker": "ARIS", "weight_pct": 8},
+    {"ticker": "FSM", "weight_pct": 7},
+    {"ticker": "MOD", "weight_pct": 7},
+    {"ticker": "AUGO", "weight_pct": 7},
+    {"ticker": "KGC", "weight_pct": 6},
+    {"ticker": "CENX", "weight_pct": 6},
+    {"ticker": "GFI", "weight_pct": 6},
+    {"ticker": "KTOS", "weight_pct": 6},
+    {"ticker": "CDE", "weight_pct": 5},
+    {"ticker": "NOC", "weight_pct": 5},
+    {"ticker": "AU", "weight_pct": 5},
+    {"ticker": "PAAS", "weight_pct": 4}    
   ]
 }
