@@ -1,0 +1,99 @@
+{
+  "fetched_at": "2026-07-30T19:28:43.326006Z",
+  "tweet_extraction": {
+    "source_posts": [
+      {
+        "url": "https://x.com/theaiportfolios/status/2082826213605937587",
+        "posted_at": "2026-07-30T13:50:41Z"
+      },
+      {
+        "url": "https://x.com/theaiportfolios/status/2082750020529660209",
+        "posted_at": "2026-07-30T08:47:55Z"
+      }
+    ],
+    "positions": [],
+    "narrative_actions": [
+      {
+        "ticker": "DHT",
+        "action": "buy",
+        "approx_price": null,
+        "stated_reason": "oil and geopolitics hedge, double digit yield at entry",
+        "posted_at": "2026-07-30"
+      }
+    ],
+    "notes": "One post discloses ~25% weight in Treasury bills (no ticker); ignored as no specific equity ticker. DHT buy is narrative only (no weight given). No other activity disclosures found."
+  },
+  "manual_override_used": true,
+  "merged_state": {
+    "SGOV": {
+      "weight_pct": 25,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "ZETA": {
+      "weight_pct": 10,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "NOW": {
+      "weight_pct": 9,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "VST": {
+      "weight_pct": 9,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "ICE": {
+      "weight_pct": 6,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "PGY": {
+      "weight_pct": 6,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "DHT": {
+      "weight_pct": 5,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "KGC": {
+      "weight_pct": 5,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "ARIS": {
+      "weight_pct": 5,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "LPLA": {
+      "weight_pct": 5,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "ARDX": {
+      "weight_pct": 5,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "INTR": {
+      "weight_pct": 5,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "KTOS": {
+      "weight_pct": 4,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    },
+    "QXO": {
+      "weight_pct": 3,
+      "as_of": "2026-07-30",
+      "source": "manual"
+    }
+  }
+}

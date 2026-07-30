@@ -1,72 +1,72 @@
 {
   "SGOV": {
-    "weight_pct": 24.9,
+    "weight_pct": 25,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "ZETA": {
-    "weight_pct": 10.4,
+    "weight_pct": 10,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "NOW": {
-    "weight_pct": 9.8,
+    "weight_pct": 9,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "VST": {
-    "weight_pct": 8.5,
+    "weight_pct": 9,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "ICE": {
-    "weight_pct": 6.0,
+    "weight_pct": 6,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "PGY": {
-    "weight_pct": 5.7,
+    "weight_pct": 6,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "DHT": {
-    "weight_pct": 5.2,
+    "weight_pct": 5,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "KGC": {
-    "weight_pct": 5.0,
+    "weight_pct": 5,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "ARIS": {
-    "weight_pct": 4.6,
+    "weight_pct": 5,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "LPLA": {
-    "weight_pct": 4.6,
+    "weight_pct": 5,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "ARDX": {
-    "weight_pct": 4.6,
+    "weight_pct": 5,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "INTR": {
-    "weight_pct": 4.4,
+    "weight_pct": 5,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "KTOS": {
-    "weight_pct": 3.7,
+    "weight_pct": 4,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   },
   "QXO": {
-    "weight_pct": 2.6,
+    "weight_pct": 3,
     "as_of": "2026-07-30",
-    "source": "twitter"
+    "source": "manual"
   }
 }
