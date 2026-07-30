@@ -1,0 +1,40 @@
+{
+  "fetched_at": "2026-07-30T14:06:36.521323Z",
+  "tweet_extraction": {
+    "source_posts": [
+      {
+        "url": "https://x.com/grkportfolio/status/2075671650989666703",
+        "posted_at": "2026-07-10T20:01:00Z"
+      }
+    ],
+    "positions": [],
+    "narrative_actions": [
+      {
+        "ticker": "AVGO",
+        "action": "buy",
+        "approx_price": 367,
+        "stated_reason": "Broadcom pullback on July 7 rebalance",
+        "posted_at": "2026-07-10"
+      }
+    ],
+    "notes": "No explicit percentage weights for any individual positions or groups were stated in the posts. The Broadcom disclosure is the only clear narrative action matching criteria. The 'close to half my book' reference for miners is aggregate commentary without specific tickers or exact weights."
+  },
+  "manual_override_used": true,
+  "merged_state": {
+    "NOW": {
+      "weight_pct": 13,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "ZETA": {
+      "weight_pct": 10,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "SGOV": {
+      "weight_pct": 14,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    }
+  }
+}
