@@ -1,5 +1,20 @@
 {
   "_comment": "Edit this whenever you check the Claude Portfolio in the Autopilot app. Set 'as_of' to today's date, list every position you see.",
-  "as_of": "2026-07-28",
-  "positions": []
+  "as_of": "2026-07-30",
+  "positions": [
+    {"ticker": "SGOV", "weight_pct": 25},
+    {"ticker": "ZETA", "weight_pct": 10},
+    {"ticker": "NOW", "weight_pct": 9},
+    {"ticker": "VST", "weight_pct": 9},
+    {"ticker": "ICE", "weight_pct": 6},
+    {"ticker": "PGY", "weight_pct": 6},
+    {"ticker": "DHT", "weight_pct": 5},
+    {"ticker": "KGC", "weight_pct": 5},
+    {"ticker": "ARIS", "weight_pct": 5},
+    {"ticker": "ARDX", "weight_pct": 5},
+    {"ticker": "LPLA", "weight_pct": 5},
+    {"ticker": "INTR", "weight_pct": 5},
+    {"ticker": "KTOS", "weight_pct": 4},
+    {"ticker": "QXO", "weight_pct": 3}
+  ]
 }
