@@ -1,6 +1,6 @@
 {
   "_comment": "Edit this whenever you check this portfolio in the Autopilot app. Set 'as_of' to today's date, list every position you see.",
-  "as_of": "2026-07-28",
+  "as_of": "2026-07-30",
   "positions": [
     {"ticker": "FRO", "weight_pct": 8},
     {"ticker": "MU", "weight_pct": 8},
