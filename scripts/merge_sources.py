@@ -86,3 +86,16 @@ def load_manual_override(path: Path) -> tuple[list[dict], datetime.date] | None:
 
 def build_target_weights(state: dict) -> dict:
     return {ticker: entry["weight_pct"] for ticker, entry in state.items()}
+
+def normalize_target_weights(target_weights: dict) -> dict:
+    """
+    Scales all weights proportionally so they sum to exactly 100%.
+    Absorbs small drift from rounding/extraction (e.g. tickers summing to
+    102%) without skipping the run -- each ticker's correction is
+    proportional to its own size, preserving relative balance between them.
+    """
+    total = sum(target_weights.values())
+    if total == 0:
+        return target_weights
+    scale = 100 / total
+    return {ticker: weight * scale for ticker, weight in target_weights.items()}
