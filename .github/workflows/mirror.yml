@@ -66,6 +66,9 @@ jobs:
 
       - name: Discover market ticker price field
         run: bgc discover --tool market --action tickers
+
+      - name: Discover market ticker response shape
+        run: bgc market --action tickers --category SPOT --symbol AVGOx
         
       - name: Run the pipeline for this portfolio
         env:
