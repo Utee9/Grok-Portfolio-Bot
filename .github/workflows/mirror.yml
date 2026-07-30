@@ -63,6 +63,9 @@ jobs:
 
       - name: Discover order placement params
         run: bgc discover --tool order --action place
+
+      - name: Discover market ticker price field
+        run: bgc discover --tool market --action tickers
         
       - name: Run the pipeline for this portfolio
         env:
