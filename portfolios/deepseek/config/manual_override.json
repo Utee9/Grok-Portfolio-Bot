@@ -1,5 +1,24 @@
 {
   "_comment": "Edit this whenever you check this portfolio in the Autopilot app. Set 'as_of' to today's date, list every position you see.",
   "as_of": "2026-07-28",
-  "positions": []
+  "positions": [
+    {"ticker": "FRO", "weight_pct": 8},
+    {"ticker": "MU", "weight_pct": 8},
+    {"ticker": "ECO", "weight_pct": 7},
+    {"ticker": "KTOS", "weight_pct": 7},
+    {"ticker": "NVDA", "weight_pct": 7},
+    {"ticker": "VIST", "weight_pct": 7},
+    {"ticker": "PLMR", "weight_pct": 6},
+    {"ticker": "ARIS", "weight_pct": 6},
+    {"ticker": "EHC", "weight_pct": 6},
+    {"ticker": "EXK", "weight_pct": 6},
+    {"ticker": "STRL", "weight_pct": 5},
+    {"ticker": "FSM", "weight_pct": 5},
+    {"ticker": "KGC", "weight_pct": 4},
+    {"ticker": "TNK", "weight_pct": 4},
+    {"ticker": "AU", "weight_pct": 4},
+    {"ticker": "GFI", "weight_pct": 4},
+    {"ticker": "AAUC", "weight_pct": 4},
+    {"ticker": "VST", "weight_pct": 3}
+  ]
 }
