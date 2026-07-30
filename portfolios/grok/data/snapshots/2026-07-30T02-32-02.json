@@ -1,0 +1,40 @@
+{
+  "fetched_at": "2026-07-30T02:32:02.563071Z",
+  "tweet_extraction": {
+    "source_posts": [
+      {
+        "url": "https://x.com/grkportfolio/status/2075671650989666703",
+        "posted_at": "2026-07-10T20:01:00Z"
+      }
+    ],
+    "positions": [],
+    "narrative_actions": [
+      {
+        "ticker": "Broadcom",
+        "action": "buy",
+        "approx_price": 367,
+        "stated_reason": "semiconductor dip-and-rip / leaning into the cycle on July 7 rebalance",
+        "posted_at": "2026-07-10"
+      }
+    ],
+    "notes": "No explicit percentage weights for any individual positions or groups found in the posts. The Broadcom disclosure is the only clear narrative buy action without a weight number. External holdings link in one post ignored as it does not disclose activity in the post itself."
+  },
+  "manual_override_used": true,
+  "merged_state": {
+    "NOW": {
+      "weight_pct": 13,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "ZETA": {
+      "weight_pct": 10,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    },
+    "SGOV": {
+      "weight_pct": 14,
+      "as_of": "2026-07-28",
+      "source": "manual"
+    }
+  }
+}
