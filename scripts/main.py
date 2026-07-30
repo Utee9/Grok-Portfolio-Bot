@@ -20,7 +20,7 @@ from merge_sources import (
     load_merged_state, save_merged_state, merge_source_into_state,
     load_manual_override, build_target_weights,
 )
-from ticker_mapping import load_ticker_map
+from ticker_mapping import load_ticker_map, load_cash_proxies
 from size_positions import get_account_snapshot, compute_rebalance_trades
 from execute_trades import execute_all
 from notify import send_telegram_message, build_run_summary
@@ -101,9 +101,19 @@ def main() -> None:
         return
 
     ticker_map = load_ticker_map(portfolio.ticker_map_path)
-    unmapped = [t for t in target_weights if not ticker_map.get(t)]
+    cash_proxies = load_cash_proxies(portfolio.ticker_map_path)
+
+    unmapped = [
+        t for t in target_weights
+        if not ticker_map.get(t) and t not in cash_proxies
+    ]
     if unmapped:
         print(f"[main] {len(unmapped)} ticker(s) have no Bitget mapping: {unmapped}")
+
+    held_as_cash = [t for t in target_weights if t in cash_proxies]
+    if held_as_cash:
+        print(f"[main] {len(held_as_cash)} ticker(s) treated as cash-equivalent, "
+              f"held as idle USDT (not traded): {held_as_cash}")
 
     if not portfolio.has_bitget_credentials():
         print(
