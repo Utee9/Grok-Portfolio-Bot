@@ -38,3 +38,8 @@ def suggest_mapping(ticker: str, env: dict) -> str | None:
         return None  # bgc raised (e.g. process-level failure) -- treat as not found
     data = result.get("data", [])
     return candidate_base if data else None
+
+def load_unavailable(ticker_map_path) -> set:
+    import json
+    raw = json.loads(ticker_map_path.read_text())
+    return set(raw.get("_unavailable_on_bitget", {}).keys())
