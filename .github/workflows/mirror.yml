@@ -60,22 +60,6 @@ jobs:
 
       - name: Install Bitget Agent CLI (bgc)
         run: npm install -g @bitget-ai/bitget-agent-cli
-
-      - name: Discover order placement params
-        run: bgc discover --tool order --action place
-
-      - name: Discover market ticker price field
-        run: bgc discover --tool market --action tickers
-
-      - name: Confirm real tokenized-stock symbol format
-        run: bgc market --action tickers --category SPOT --symbol rMUUSDT
-
-      - name: Verify all ticker mappings
-        run: |
-          for t in rNOW rVST rZETA rMGNI rHALO rRDDT rARDX rKTOS rQXO; do
-            echo "=== $t ==="
-            bgc market --action tickers --category SPOT --symbol ${t}USDT || true
-          done
         
       - name: Run the pipeline for this portfolio
         env:
