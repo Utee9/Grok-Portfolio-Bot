@@ -42,6 +42,7 @@ def build_run_summary(
     execution_results: list[dict],
     unmapped: list[str],
     narrative_actions: list[dict] | None = None,
+    unavailable_on_bitget: list[str] | None = None,
     tracking_only: bool = False,
 ) -> str:
     header = f"[{display_name}] "
@@ -74,6 +75,12 @@ def build_run_summary(
     if unmapped:
         lines.append("Unmapped tickers (no Bitget symbol -- add to ticker_map.json):")
         for t in unmapped:
+            lines.append(f"  - {t}")
+        lines.append("")
+
+    if unavailable_on_bitget:
+        lines.append("Not available on Bitget (confirmed -- not a data error, Bitget just doesn't offer these as tokenized stocks yet):")
+        for t in unavailable_on_bitget:
             lines.append(f"  - {t}")
 
     return "\n".join(lines).rstrip()
