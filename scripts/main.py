@@ -139,7 +139,8 @@ def main() -> None:
         )
         summary = build_run_summary(
             portfolio.display_name, target_weights, [], unmapped,
-            narrative_actions, tracking_only=True,
+            narrative_actions, unavailable_on_bitget=confirmed_unavailable,
+            tracking_only=True,
         )
         print(summary)
         send_telegram_message(summary)
@@ -161,7 +162,10 @@ def main() -> None:
 
     execution_results = execute_all(trades, portfolio)
 
-    summary = build_run_summary(portfolio.display_name, target_weights, execution_results, unmapped, narrative_actions)
+    summary = build_run_summary(
+        portfolio.display_name, target_weights, execution_results, unmapped,
+        narrative_actions, unavailable_on_bitget=confirmed_unavailable,
+    )
     print(summary)
     send_telegram_message(summary)
 
