@@ -1,19 +1,29 @@
 {
-  "_comment": "Map each stock ticker Grok trades to its Bitget tokenized-stock symbol. Set the value to null if a ticker has no Bitget equivalent yet -- the pipeline will skip it and alert you instead of silently failing. Verify exact Bitget symbol formatting (e.g. 'x' suffix) with `bgc discover` or the Bitget app before relying on this.",
+  "_comment": "Confirmed against live Bitget SPOT tickers on 2026-07-31 using 'r' prefix + USDT pair convention (e.g. MU -> rMU, traded as rMUUSDT). null = confirmed NOT available as a Bitget tokenized stock -- not a missing mapping, a real product gap. Re-check periodically as Bitget's tokenized-stock catalog grows.",
 
-  "NOW": "NOWx",
-  "VST": "VSTx",
-  "ZETA": "ZETAx",
+  "NOW": "rNOW",
+  "VST": "rVST",
+  "ZETA": null,
   "SGOV": null,
-  "MGNI": "MGNIx",
-  "HALO": "HALOx",
-  "RDDT": "RDDTx",
-  "ARDX": "ARDXx",
-  "KTOS": "KTOSx",
-  "QXO": "QXOx",
+  "MGNI": null,
+  "HALO": null,
+  "RDDT": "rRDDT",
+  "ARDX": null,
+  "KTOS": null,
+  "QXO": null,
 
   "_cash_proxies": {
-    "_comment": "Grok sometimes parks weight in T-bill ETFs (e.g. SGOV) as a cash-equivalent. Bitget doesn't tokenize these. Decide how you want to treat 'cash' weight -- e.g. hold as idle USDT in the sub-account rather than trying to buy an equivalent.",
+    "_comment": "Grok sometimes parks weight in T-bill ETFs (e.g. SGOV) as a cash-equivalent. Bitget doesn't tokenize these. Held as idle USDT instead of traded.",
     "SGOV": "HOLD_AS_USDT"
+  },
+
+  "_unavailable_on_bitget": {
+    "_comment": "Confirmed via live API check, not just absent from this file. Distinct from _cash_proxies -- these are real equity positions Grok wants, Bitget just doesn't offer them tokenized. Re-run the mapping-suggestion workflow periodically in case Bitget adds them.",
+    "ZETA": "not listed",
+    "MGNI": "not listed",
+    "HALO": "not listed",
+    "ARDX": "not listed",
+    "KTOS": "not listed",
+    "QXO": "not listed"
   }
 }
