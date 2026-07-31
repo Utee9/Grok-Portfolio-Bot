@@ -103,7 +103,13 @@ def compute_rebalance_trades(target_weights, ticker_map, snapshot, allow_closure
         side = "buy" if delta > 0 else "sell"
         usdt_amount = round(min(abs(delta), MAX_SINGLE_TRADE_USDT), 2)
 
-        trades.append({"ticker": ticker, "bitget_symbol": symbol, "side": side, "usdt_amount": usdt_amount})
+        trades.append({
+            "ticker": ticker,
+            "bitget_symbol": symbol,
+            "side": side,
+            "usdt_amount": usdt_amount,
+            "reason": f"target ${target_value:.2f} vs held ${current_value:.2f}",
+        })
 
     if allow_closures:
         for ticker, value in held_value_by_ticker.items():
