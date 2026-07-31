@@ -67,8 +67,8 @@ jobs:
       - name: Discover mkaret ticker price field
         run: bgc discover --tool market --action tickers
 
-      - name: Test full pair symbol format
-        run: bgc market --action tickers --category SPOT --symbol NOWxUSDT
+      - name: Confirm real tokenized-stock symbol format
+        run: bgc market --action tickers --category SPOT --symbol rMUUSDT
         
       - name: Run the pipeline for this portfolio
         env:
