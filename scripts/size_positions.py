@@ -105,5 +105,18 @@ def compute_rebalance_trades(target_weights, ticker_map, snapshot, allow_closure
 
         trades.append({"ticker": ticker, "bitget_symbol": symbol, "side": side, "usdt_amount": usdt_amount})
 
-    # unchanged allow_closures block below this...
+    if allow_closures:
+        for ticker, value in held_value_by_ticker.items():
+            if ticker in target_weights or value < MIN_TRADE_USDT:
+                continue
+            symbol = ticker_map.get(ticker)
+            if not symbol:
+                continue
+            trades.append({
+                "ticker": ticker,
+                "bitget_symbol": symbol,
+                "side": "sell",
+                "usdt_amount": round(min(value, MAX_SINGLE_TRADE_USDT), 2),
+            })
+
     return trades
