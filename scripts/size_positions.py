@@ -123,6 +123,7 @@ def compute_rebalance_trades(target_weights, ticker_map, snapshot, allow_closure
                 "bitget_symbol": symbol,
                 "side": "sell",
                 "usdt_amount": round(min(value, MAX_SINGLE_TRADE_USDT), 2),
+                "reason": f"no longer in target weights, closing ${value:.2f} position",
             })
 
     return trades
