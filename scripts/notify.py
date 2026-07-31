@@ -33,7 +33,7 @@ def _format_weights(target_weights: dict) -> list[str]:
         return ["  (no target weights known yet)"]
 
     sorted_weights = sorted(target_weights.items(), key=lambda item: -item[1])
-    return [f"  {ticker}: {weight}%" for ticker, weight in sorted_weights]
+    return [f"  {ticker}: {weight:.1f}%" for ticker, weight in sorted_weights]
 
 
 def build_run_summary(
