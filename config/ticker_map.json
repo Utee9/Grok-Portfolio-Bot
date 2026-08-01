@@ -1,0 +1,30 @@
+{
+  "_comment": "Single shared mapping from stock ticker to Bitget tokenized-stock BASE symbol, used by ALL portfolios (Grok, Claude, DeepSeek, GPT) -- Bitget's tokenized-stock catalog isn't portfolio-specific, MU means rMU regardless of which portfolio holds it. Confirmed format: 'r' prefix, traded as <symbol>USDT (e.g. MU -> rMU -> rMUUSDT). null = confirmed NOT available on Bitget. Absent entirely = not yet checked; picked up automatically by the daily ticker-mapping-suggestion workflow.",
+
+  "NOW": "rNOW",
+  "VST": "rVST",
+  "MU": "rMU",
+  "RDDT": "rRDDT",
+  "ZETA": null,
+  "SGOV": null,
+  "MGNI": null,
+  "HALO": null,
+  "ARDX": null,
+  "KTOS": null,
+  "QXO": null,
+
+  "_cash_proxies": {
+    "_comment": "Tickers any portfolio might report as a cash-equivalent (e.g. T-bill ETFs). Bitget doesn't tokenize these -- held as idle USDT instead of traded.",
+    "SGOV": "HOLD_AS_USDT"
+  },
+
+  "_unavailable_on_bitget": {
+    "_comment": "Confirmed via live API check, not just absent from this file.",
+    "ZETA": "not listed",
+    "MGNI": "not listed",
+    "HALO": "not listed",
+    "ARDX": "not listed",
+    "KTOS": "not listed",
+    "QXO": "not listed"
+  }
+}
