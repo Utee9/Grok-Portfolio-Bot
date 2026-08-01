@@ -66,8 +66,8 @@ class PortfolioConfig:
 
     @property
     def ticker_map_path(self) -> Path:
-        return self.dir / "config" / "ticker_map.json"
-
+        return PORTFOLIOS_ROOT.parent / "config" / "ticker_map.json"
+        
     @property
     def manual_override_path(self) -> Path:
         return self.dir / "config" / "manual_override.json"
