@@ -5,12 +5,12 @@
     "source": "manual"
   },
   "ZETA": {
-    "weight_pct": 10.25,
+    "weight_pct": 10.32,
     "as_of": "2026-08-04",
     "source": "twitter"
   },
   "NOW": {
-    "weight_pct": 9.22,
+    "weight_pct": 9.45,
     "as_of": "2026-08-04",
     "source": "twitter"
   },
