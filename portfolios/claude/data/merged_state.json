@@ -1,72 +1,82 @@
 {
   "SGOV": {
-    "weight_pct": 25,
-    "as_of": "2026-07-30",
-    "source": "manual"
+    "weight_pct": 16.6,
+    "as_of": "2026-08-05",
+    "source": "twitter"
   },
   "ZETA": {
-    "weight_pct": 10.32,
-    "as_of": "2026-08-04",
+    "weight_pct": 10.4,
+    "as_of": "2026-08-05",
     "source": "twitter"
   },
   "NOW": {
-    "weight_pct": 9.45,
-    "as_of": "2026-08-04",
+    "weight_pct": 9.1,
+    "as_of": "2026-08-05",
     "source": "twitter"
   },
   "VST": {
-    "weight_pct": 8.7,
-    "as_of": "2026-08-04",
+    "weight_pct": 9.1,
+    "as_of": "2026-08-05",
     "source": "twitter"
   },
   "ICE": {
-    "weight_pct": 6,
-    "as_of": "2026-07-30",
-    "source": "manual"
+    "weight_pct": 5.6,
+    "as_of": "2026-08-05",
+    "source": "twitter"
   },
   "PGY": {
-    "weight_pct": 6,
-    "as_of": "2026-07-30",
-    "source": "manual"
+    "weight_pct": 7.3,
+    "as_of": "2026-08-05",
+    "source": "twitter"
   },
   "DHT": {
-    "weight_pct": 5,
-    "as_of": "2026-07-30",
-    "source": "manual"
+    "weight_pct": 5.0,
+    "as_of": "2026-08-05",
+    "source": "twitter"
   },
   "KGC": {
-    "weight_pct": 5,
-    "as_of": "2026-07-30",
-    "source": "manual"
+    "weight_pct": 5.0,
+    "as_of": "2026-08-05",
+    "source": "twitter"
   },
   "ARIS": {
-    "weight_pct": 5,
-    "as_of": "2026-07-30",
-    "source": "manual"
+    "weight_pct": 4.7,
+    "as_of": "2026-08-05",
+    "source": "twitter"
   },
   "LPLA": {
-    "weight_pct": 5,
-    "as_of": "2026-07-30",
-    "source": "manual"
+    "weight_pct": 4.6,
+    "as_of": "2026-08-05",
+    "source": "twitter"
   },
   "ARDX": {
-    "weight_pct": 5,
-    "as_of": "2026-07-30",
-    "source": "manual"
+    "weight_pct": 4.4,
+    "as_of": "2026-08-05",
+    "source": "twitter"
   },
   "INTR": {
-    "weight_pct": 5,
-    "as_of": "2026-07-30",
-    "source": "manual"
+    "weight_pct": 4.3,
+    "as_of": "2026-08-05",
+    "source": "twitter"
   },
   "KTOS": {
-    "weight_pct": 4,
-    "as_of": "2026-07-30",
-    "source": "manual"
+    "weight_pct": 4.1,
+    "as_of": "2026-08-05",
+    "source": "twitter"
   },
   "QXO": {
     "weight_pct": 3,
     "as_of": "2026-07-30",
     "source": "manual"
+  },
+  "MU": {
+    "weight_pct": 6.0,
+    "as_of": "2026-08-05",
+    "source": "twitter"
+  },
+  "PHVS": {
+    "weight_pct": 4.0,
+    "as_of": "2026-08-05",
+    "source": "twitter"
   }
 }
