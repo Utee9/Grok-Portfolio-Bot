@@ -31,5 +31,8 @@
   "KGC": "rKGC",
   "MSFT": "rMSFT",
   "NOC": "rNOC",
-  "NVDA": "rNVDA"
+  "NVDA": "rNVDA",
+  "OSCR": "rOSCR",
+  "SNDK": "rSNDK",
+  "STRL": "rSTRL"
 }
