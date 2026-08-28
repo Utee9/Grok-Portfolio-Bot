@@ -1,4 +1,4 @@
 {
-  "dry_run": true,
-  "paper_trading": false
+  "dry_run": false,
+  "paper_trading": true
 }
