@@ -1,0 +1,30 @@
+name: Coverage Recheck (Bitget vs MEXC)
+
+# Purely informational -- never places trades, never touches sub-accounts.
+# Runs monthly (1st of the month) plus supports manual dispatch any time
+# you want to check on demand, e.g. after MEXC or Bitget announces new
+# tokenized-stock listings.
+
+on:
+  schedule:
+    - cron: "0 9 1 * *"   # 09:00 UTC on the 1st of every month
+  workflow_dispatch: {}
+
+jobs:
+  recheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run coverage recheck
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scripts/coverage_recheck.py
