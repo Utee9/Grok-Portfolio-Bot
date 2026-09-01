@@ -2,8 +2,9 @@
 
 Mirrors publicly-disclosed AI-managed stock portfolios (Grok, Claude,
 DeepSeek, GPT -- all run by Dr. Alejandro Lopez-Lira's AI Finance Labs via
-Autopilot) into their own isolated Bitget tokenized-stock sub-accounts,
-since Bitget's supported brokerages don't accept Nigerian residents.
+Autopilot) into their own isolated crypto tokenized-stock sub-accounts,
+since Autopilot and other SEC licensed platforms supported brokerages either 
+don't accept Nigerian residents or don't support automation/bot trading.
 
 Each portfolio runs as its own independent pipeline: its own data source,
 its own Bitget sub-account, its own dry-run/paper-trading toggle. A bug or
