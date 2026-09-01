@@ -64,6 +64,20 @@ class PortfolioConfig:
             for base in ("BITGET_API_KEY", "BITGET_SECRET_KEY", "BITGET_PASSPHRASE")
         )
 
+    def has_mexc_credentials(self) -> bool:
+        """
+        True if both MEXC credentials are present for this portfolio.
+        Not currently used by main.py -- MEXC integration is shelved since
+        it was confirmed to be a strict subset of Bitget's Reality-token
+        coverage for every ticker held so far (see coverage_recheck.py,
+        which watches for that ever changing). Kept here so activating
+        MEXC later is a small change, not a rebuild.
+        """
+        return all(
+            os.environ.get(self._env_name(base))
+            for base in ("MEXC_API_KEY", "MEXC_SECRET_KEY")
+        )
+
     @property
     def ticker_map_path(self) -> Path:
         return PORTFOLIOS_ROOT.parent / "config" / "ticker_map.json"
