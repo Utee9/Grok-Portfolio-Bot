@@ -9,8 +9,8 @@
   "MGNI": null,
   "HALO": null,
   "ARDX": null,
-  "KTOS": null,
-  "QXO": null,
+  "KTOS": "rKTOS",
+  "QXO": "rQXO",
   "_cash_proxies": {
     "_comment": "Tickers any portfolio might report as a cash-equivalent (e.g. T-bill ETFs). Bitget doesn't tokenize these -- held as idle USDT instead of traded.",
     "SGOV": "HOLD_AS_USDT"
@@ -20,9 +20,7 @@
     "ZETA": "not listed",
     "MGNI": "not listed",
     "HALO": "not listed",
-    "ARDX": "not listed",
-    "KTOS": "not listed",
-    "QXO": "not listed"
+    "ARDX": "not listed"
   },
   "AU": "rAU",
   "AVGO": "rAVGO",
@@ -35,5 +33,12 @@
   "LPLA": "rLPLA",
   "OSCR": "rOSCR",
   "SNDK": "rSNDK",
-  "STRL": "rSTRL"
+  "STRL": "rSTRL",
+  "AGI": "rAGI",
+  "CDE": "rCDE",
+  "EHC": "rEHC",
+  "GFI": "rGFI",
+  "HBM": "rHBM",
+  "MOD": "rMOD",
+  "PAAS": "rPAAS"
 }
