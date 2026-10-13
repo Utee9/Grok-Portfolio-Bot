@@ -8,7 +8,7 @@
   "SGOV": null,
   "MGNI": null,
   "HALO": null,
-  "ARDX": null,
+  "ARDX": "rARDX",
   "KTOS": "rKTOS",
   "QXO": "rQXO",
   "_cash_proxies": {
@@ -18,8 +18,7 @@
   "_unavailable_on_bitget": {
     "_comment": "Confirmed via live API check, not just absent from this file.",
     "MGNI": "not listed",
-    "HALO": "not listed",
-    "ARDX": "not listed"
+    "HALO": "not listed"
   },
   "AU": "rAU",
   "AVGO": "rAVGO",
@@ -61,5 +60,6 @@
   "SRRK": "rSRRK",
   "STNG": "rSTNG",
   "TNK": "rTNK",
-  "VIST": "rVIST"
+  "VIST": "rVIST",
+  "ASM": "rASM"
 }
